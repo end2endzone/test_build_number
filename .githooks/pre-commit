@@ -1,4 +1,17 @@
 #!/bin/sh
+#
+# This script generates a file named build_number in the root of the repository before every commits.
+# The file contains an emulation of a build number or build version.
+# The format of the file is `<number of commits in origin/main>.<number of commits in branch>".
+#
+# For example, version `12.6` means that this commit is based on origin/main when it was 12 commits old.
+# and that there were 6 commits in our local branch since then.
+# Two senarios could create such a version:
+#   1. The user has barnched out origin/main when it was 12 commits old.
+#   2. User is working in local main branch but has not pushed his changes back to origin.
+#
+# Note also that origin/main could also have more than 12 commits but user has not fetched these commits yet in his local repository.
+#
 
 # Get the number of commits in origin
 git rev-list --count origin/main > build_number
@@ -8,7 +21,7 @@ echo -n "$(cat build_number)" > build_number
 
 # Then add the number of commits from origin/main to local main
 echo -n "." >> build_number
-echo -n "$(git rev-list origin/main..main --count)" >> build_number
+echo -n "$(git rev-list origin/main..HEAD --count)" >> build_number
 
 # debug
 echo Build number set to $(cat build_number).
