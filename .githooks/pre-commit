@@ -1,8 +1,16 @@
 #!/bin/sh
 
-git rev-list --count main > build_number
+# Get the number of commits in origin
+git rev-list --count origin/main > build_number
 
 # Remove trailing LF in file to prevent warnings on Windows
 echo -n "$(cat build_number)" > build_number
+
+# Then add the number of commits from origin/main to local main
+echo -n "." >> build_number
+echo -n "$(git rev-list origin/main..main --count)" >> build_number
+
+# debug
+echo Build number set to $(cat build_number).
 
 git add build_number
