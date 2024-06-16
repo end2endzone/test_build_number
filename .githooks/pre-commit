@@ -1,0 +1,8 @@
+#!/bin/sh
+
+git rev-list --count main > build_number
+
+# Remove trailing LF in file to prevent warnings on Windows
+echo -n "$(cat build_number)" > build_number
+
+git add build_number
